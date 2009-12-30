@@ -1,0 +1,6 @@
+; $Id: tabsexample.info,v 1.1 2008/03/26 23:05:50 nedjo Exp $
+name = Tabs Example
+description = An example tabs implementation. Access the sample tabs at /tabsexample.
+package = User Interface
+dependencies[] = tabs
+core = 6.x

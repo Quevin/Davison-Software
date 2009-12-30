@@ -1,0 +1,6 @@
+; $Id: wijering.info,v 1.1.2.4.2.3 2008/08/23 13:36:27 stuartgreenfield Exp $
+name =  JW Media Player 3
+description = Enables support for JW Media Player 3.
+package = SWF Tools
+dependencies[] = swftools
+core = 6.x

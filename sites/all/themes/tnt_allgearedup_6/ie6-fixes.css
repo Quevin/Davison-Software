@@ -1,0 +1,232 @@
+/* All Geared Up 6 - topnotchthemes_1021 v1.2 06122009 */
+
+/*************/
+/* IE6 FIXES */
+/*************/
+
+body {
+  background: #999999 url('images/body-bg.jpg') repeat-x top;
+  color: #5A5A5A;
+  font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Helvetica, Arial, sans-serif;     /* web safe fonts */
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 16px;
+}
+
+#primary-menu ul.menu li a,
+#primary-menu ul.menu li a:link,
+#primary-menu ul.menu li a:visited {
+  padding: 10px 10px 8px 10px;
+}
+
+#primary-menu ul.menu li.active-trail a.active{
+  background: #921919 url('images/primary-menu-active.png') repeat-x center;  
+  color: #fff;
+}
+
+#primary-menu ul.menu li.leaf.first {
+  background: transparent url('images/primary-menu-rounded-left.png') no-repeat 0 0;
+  margin: 0;
+  padding: 0 0 0 8px;
+}
+
+#primary-menu ul.menu li.expanded.first {
+  background: transparent url('images/primary-menu-rounded-left.png') no-repeat 0 0;
+  margin: 0;
+  padding: 0 0 0 8px;
+}
+
+#header-top #search-box {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
+#header-top #edit-search-theme-form-keys.form-text {
+  padding-top: 0;
+  margin-bottom: 4px;
+}
+
+#header-top .form-submit {
+  height: 1%;
+  position: relative;
+  top: 2px;
+}
+
+#sidebar-last .form-submit {
+  margin: -3px 0 0 0;
+}
+
+#header-bottom ul li {
+  background: transparent url('images/ie6-green-check.png') no-repeat 10px 0;
+  padding: 0 0 0 18px;
+}
+
+.front #logo {
+  float: left;
+  margin: 0;
+  padding: 0 100px 0 30px;
+}
+
+.not-front #logo {
+  padding-left: 16px;
+}
+
+.front #header-first {
+  width: 300px;
+}
+
+.front #header-last {
+  height: 228px;
+  padding: 0 20px 0 0;
+  width: 230px;
+}
+
+.not-front #header-wrapper {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.not-front #header-last {
+  right: -8px;
+  top: 9px;
+}
+
+#preface-wrapper {
+  margin-top: 0;
+}
+
+#preface-first,
+#preface-last {
+  margin-top: -14px;
+}
+
+#main-wrapper {
+  background: #fff;
+  height: 1%;
+  margin: 0;
+  padding: 20px;
+  padding-right: 14px;
+}
+
+#sidebar-last .block-wrapper.odd {
+  padding-top: 2px;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-block.rounded-block-top {
+  padding: 2px 0 0;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-block.rounded-block-bottom {
+  height: 100%;
+  margin: -22px 0 0;
+  padding: 0;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-inside {
+  background: transparent url('images/odd-block-bg.png') repeat-y center;
+  border-left: 0;                                 /* left inside border color & width */
+  border-right: 0;                                /* right inside border color & width */
+  margin: -3px 0 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#sidebar-last .block-wrapper .content {
+  padding-bottom: 10px;
+}
+
+#sidebar-last .block-wrapper.odd .odd {
+  padding-left: 20px;
+  width: 99%
+}
+
+.postscript-first #postscript-first .rounded-block-bottom,
+.postscript-first-middle #postscript-first .rounded-block-bottom ,
+.postscript-first-middle-last #postscript-first .rounded-block-bottom,
+.postscript-first-last #postscript-first .rounded-block-bottom  {
+  padding: 16px 0 0;
+}
+
+.postscript-first #postscript-middle .rounded-block-bottom,
+.postscript-first-middle #postscript-middle .rounded-block-bottom ,
+.postscript-first-middle-last #postscript-middle .rounded-block-bottom,
+.postscript-middle #postscript-middle .rounded-block-bottom,
+.postscript-middle-last #postscript-middle .rounded-block-bottom   {
+  padding: 8px 0 0;
+}
+
+.tnt-panel .panel-pane {
+  position: relative;
+}
+
+#footer-top {
+  background: transparent url('images/rounded-bottom.jpg') no-repeat 0 0;
+  height:10px;
+  margin:0;
+  padding:0;
+}
+
+#footer {
+  padding: 0 0 20px;
+}
+
+li.leaf {
+  background: transparent url('images/red-bullet.png') no-repeat 2px 0.75em;
+  list-style-image: none;
+  list-style-type: none;
+  margin: 0.15em 0 0.15em .5em
+}
+
+#content ul li,
+.item-list ul li {
+  padding: 0.2em 0.5em 0 0;
+}
+
+.book-navigation .page-previous {
+  background: url(images/arrow-left-ie6.gif) no-repeat;
+}
+
+.book-navigation .page-next {
+  background: url(images/arrow-right-ie6.gif) no-repeat;
+}
+
+.book-navigation .page-next {
+  background-position: right 0;
+  padding: 3px 35px 0 0;
+}
+
+/**************************/
+/* ALPHA TRANSPARENCY FIX */
+/**************************/
+.pngfix { 
+  behavior: url(/sites/all/themes/tnt_allgearedup_6/iepngfix.htc);   /* change path here and in iepngfix.htc to match theme location */ 
+} 
+
+
+/******************/
+/* HELPER CLASSES */
+/******************/
+.clearfix {                                       /* add .clearfix class to clear floats after an element */
+  display: block;
+  height: 1%;
+}
+
+div#content-tabs,                                 /* fix tab layout */
+div#content-tabs ul.primary,
+div#content-tabs ul.secondary {
+  display: block;
+  float: none;
+  height: 1%;
+}
+
+
+/*******************/
+/* USER LOGIN BLOCK */
+/*******************/
+#header-top #block-user-0 .item-list  {
+  position: relative;
+}
+
+#header-top #block-user-0 .item-list li {
+  padding: 0 0 0 10px;
+}

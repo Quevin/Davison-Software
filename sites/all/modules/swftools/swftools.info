@@ -1,0 +1,5 @@
+; $Id: swftools.info,v 1.1.2.2.2.2 2008/08/23 13:36:27 stuartgreenfield Exp $
+name =  SWF Tools
+description = This is the core component of SWF Tools and provides a common API for handling Adobe Flash related media.
+package = SWF Tools
+core = 6.x

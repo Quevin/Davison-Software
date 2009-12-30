@@ -1,0 +1,5 @@
+; $Id: xmlsitemap.info,v 1.2 2008/05/20 17:48:46 darrenoh Exp $
+name = XML Sitemap
+description = Creates an XML site map in accordance with the sitemaps.org specification.
+package = XML Sitemap
+core = 6.x

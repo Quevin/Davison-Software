@@ -1,0 +1,31 @@
+/*******************************/
+/* PANELS LAYOUT FOR TNT THEME */
+/*******************************/
+
+.tnt-panel { 
+/*  overflow: hidden;  */
+}
+
+.tnt-panel .panel-preface-wrapper,
+.tnt-panel .panel-postscript-wrapper,
+.tnt-panel .panel-main-upper,
+.tnt-panel .panel-main-lower { 
+  width: 100%; 
+  clear: both;
+}
+
+.tnt-panel .panel-preface-first,
+.tnt-panel .panel-postscript-first { 
+  float: left; 
+  width: 49%; 
+}
+
+.tnt-panel .panel-preface-last,
+.tnt-panel .panel-postscript-last { 
+  float: right; 
+  width: 49%; 
+}
+
+.tnt-panel .panel-separator {
+  margin: 0 0 1em 0;
+}

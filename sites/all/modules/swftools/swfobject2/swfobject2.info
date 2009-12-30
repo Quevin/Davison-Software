@@ -1,0 +1,6 @@
+; $Id: swfobject2.info,v 1.1.2.5 2008/08/23 13:36:28 stuartgreenfield Exp $
+name =  SWFObject2
+description = Enables support for the SWFObject 2 embedding method.
+package = SWF Tools
+dependencies[] = swftools
+core = 6.x

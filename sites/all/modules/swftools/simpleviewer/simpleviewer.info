@@ -1,0 +1,7 @@
+; $Id: simpleviewer.info,v 1.1.2.3.2.3 2008/08/23 13:36:28 stuartgreenfield Exp $
+name =  SimpleViewer
+description = Enables support for SimpleViewer.
+package = SWF Tools
+dependencies[] = swftools
+core = 6.x
+

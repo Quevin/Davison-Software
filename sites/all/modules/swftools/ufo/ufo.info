@@ -1,0 +1,6 @@
+; $Id: ufo.info,v 1.1.2.3.2.2 2008/08/23 13:36:27 stuartgreenfield Exp $
+name =  UFO
+description = Enables support for the UFO embedding method.
+package = SWF Tools
+dependencies[] = swftools
+core = 6.x

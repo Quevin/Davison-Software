@@ -1,0 +1,6 @@
+; $Id: xmlsitemap_term.info,v 1.2 2008/05/20 17:48:47 darrenoh Exp $
+name = XML Sitemap: Term
+description = Adds taxonomy terms to the site map.
+package = XML Sitemap
+dependencies[] = xmlsitemap
+core = "6.x"
