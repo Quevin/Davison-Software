@@ -5,7 +5,7 @@
 /**
  * Theme setting defaults
  */
-function tnt_allgearedup_6_default_theme_settings() {
+function davisonsoftware_default_theme_settings() {
   $defaults = array(
     'mission_statement_pages'               => 'home',
     'breadcrumb_display'                    => 0,
@@ -101,7 +101,7 @@ function tnt_allgearedup_6_default_theme_settings() {
  * Theme setting initialization
  * if updated, unsaved, or registry rebuild mode
  */
-function tnt_allgearedup_6_initialize_theme_settings($theme_name) {
+function davisonsoftware_initialize_theme_settings($theme_name) {
   $theme_settings = theme_get_settings($theme_name);
   if (is_null($theme_settings['fix_css_limit']) || $theme_settings['rebuild_registry'] == 1) {
     // Rebuild theme registry & notify user
@@ -122,7 +122,7 @@ function tnt_allgearedup_6_initialize_theme_settings($theme_name) {
     }
   
     // Retrieve default theme settings
-    $defaults = tnt_allgearedup_6_default_theme_settings();
+    $defaults = davisonsoftware_default_theme_settings();
   
     // Set combined default & saved theme settings
     variable_set($theme_setting_name, array_merge($defaults, $settings));
@@ -141,11 +141,11 @@ function tnt_allgearedup_6_initialize_theme_settings($theme_name) {
 * @return
 *   array A form array.
 */
-function tnt_allgearedup_6_settings($saved_settings) {
+function davisonsoftware_settings($saved_settings) {
   global $base_url;
 
   // Retrieve & combine default and saved theme settings
-  $defaults = tnt_allgearedup_6_default_theme_settings();
+  $defaults = davisonsoftware_default_theme_settings();
   $settings = array_merge($defaults, $saved_settings);
   
   // Create theme settings form widgets using Forms API

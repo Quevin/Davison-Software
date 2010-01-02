@@ -7,20 +7,20 @@ include_once('theme-settings.php');
 /**
  * Initialize theme settings if needed
  */
-tnt_allgearedup_6_initialize_theme_settings('tnt_allgearedup_6');
+davisonsoftware_initialize_theme_settings('davisonsoftware');
 
 
 /**
  * Modify theme variables
  */
-function tnt_allgearedup_6_preprocess(&$vars) {
+function davisonsoftware_preprocess(&$vars) {
   global $user;                                            // Get the current user
   $vars['is_admin'] = in_array('admin', $user->roles);     // Check for Admin, logged in
   $vars['logged_in'] = ($user->uid > 0) ? TRUE : FALSE;
 }
 
 
-function tnt_allgearedup_6_preprocess_page(&$vars) {
+function davisonsoftware_preprocess_page(&$vars) {
   global $language;
   // Remove sidebars if disabled e.g., for Panels
   if (!$vars['show_blocks']) {
@@ -171,7 +171,7 @@ function tnt_allgearedup_6_preprocess_page(&$vars) {
   
   // Use grouped import technique for more than 30 un-aggregated stylesheets (css limit fix for IE)
   $css = drupal_add_css();
-  if (theme_get_setting('fix_css_limit') && !variable_get('preprocess_css', FALSE) && tnt_allgearedup_6_css_count($css) > 26) {
+  if (theme_get_setting('fix_css_limit') && !variable_get('preprocess_css', FALSE) && davisonsoftware_css_count($css) > 26) {
     $styles = '';
     $suffix = "\n".'</style>'."\n";
     foreach ($css as $media => $types) {
@@ -196,14 +196,14 @@ function tnt_allgearedup_6_preprocess_page(&$vars) {
 }
 
 
-function tnt_allgearedup_6_preprocess_block(&$vars) {
+function davisonsoftware_preprocess_block(&$vars) {
   // Add regions with rounded blocks (e.g., sidebar_first, sidebar_last) to $rounded_regions array
   $rounded_regions = array();
   $vars['rounded_block'] = (in_array($vars['block']->region, $rounded_regions)) ? TRUE : FALSE;
 }
 
 
-function tnt_allgearedup_6_preprocess_node(&$vars) {
+function davisonsoftware_preprocess_node(&$vars) {
   // Build array of handy node classes
   $node_classes = array();
   $node_classes[] = $vars['zebra'];                                      // Node is odd or even
@@ -273,7 +273,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
   if (isset($vars['node']->links['node_read_more'])) {
     $node_content_type = (theme_get_setting('readmore_enable_content_type') == 1) ? $vars['node']->type : 'default';
     $vars['node']->links['node_read_more'] = array(
-      'title' => tnt_allgearedup_6_themesettings_link(
+      'title' => davisonsoftware_themesettings_link(
         theme_get_setting('readmore_prefix_'. $node_content_type),
         theme_get_setting('readmore_suffix_'. $node_content_type),
         theme_get_setting('readmore_'. $node_content_type),
@@ -291,7 +291,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
     $node_content_type = (theme_get_setting('comment_enable_content_type') == 1) ? $vars['node']->type : 'default';
     if ($vars['teaser']) {
       $vars['node']->links['comment_add'] = array(
-        'title' => tnt_allgearedup_6_themesettings_link(
+        'title' => davisonsoftware_themesettings_link(
           theme_get_setting('comment_add_prefix_'. $node_content_type),
           theme_get_setting('comment_add_suffix_'. $node_content_type),
           theme_get_setting('comment_add_'. $node_content_type),
@@ -307,7 +307,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
     }
     else {
       $vars['node']->links['comment_add'] = array(
-        'title' => tnt_allgearedup_6_themesettings_link(
+        'title' => davisonsoftware_themesettings_link(
           theme_get_setting('comment_node_prefix_'. $node_content_type),
           theme_get_setting('comment_node_suffix_'. $node_content_type),
           theme_get_setting('comment_node_'. $node_content_type),
@@ -325,7 +325,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
   if (isset($vars['node']->links['comment_new_comments'])) {
     $node_content_type = (theme_get_setting('comment_enable_content_type') == 1) ? $vars['node']->type : 'default';
     $vars['node']->links['comment_new_comments'] = array(
-      'title' => tnt_allgearedup_6_themesettings_link(
+      'title' => davisonsoftware_themesettings_link(
         theme_get_setting('comment_new_prefix_'. $node_content_type),
         theme_get_setting('comment_new_suffix_'. $node_content_type),
         format_plural(
@@ -346,7 +346,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
   if (isset($vars['node']->links['comment_comments'])) {
     $node_content_type = (theme_get_setting('comment_enable_content_type') == 1) ? $vars['node']->type : 'default';
     $vars['node']->links['comment_comments'] = array(
-      'title' => tnt_allgearedup_6_themesettings_link(
+      'title' => davisonsoftware_themesettings_link(
         theme_get_setting('comment_prefix_'. $node_content_type),
         theme_get_setting('comment_suffix_'. $node_content_type),
         format_plural(
@@ -368,7 +368,7 @@ function tnt_allgearedup_6_preprocess_node(&$vars) {
 }
 
 
-function tnt_allgearedup_6_preprocess_comment(&$vars) {
+function davisonsoftware_preprocess_comment(&$vars) {
   global $user;
   // Build array of handy comment classes
   $comment_classes = array();
@@ -395,7 +395,7 @@ function tnt_allgearedup_6_preprocess_comment(&$vars) {
  * Set defaults for comments display
  * (Requires comment-wrapper.tpl.php file in theme directory)
  */
-function tnt_allgearedup_6_preprocess_comment_wrapper(&$vars) {
+function davisonsoftware_preprocess_comment_wrapper(&$vars) {
   $vars['display_mode']  = COMMENT_MODE_FLAT_EXPANDED;
   $vars['display_order'] = COMMENT_ORDER_OLDEST_FIRST;
   $vars['comment_controls_state'] = COMMENT_CONTROLS_HIDDEN;
@@ -407,7 +407,7 @@ function tnt_allgearedup_6_preprocess_comment_wrapper(&$vars) {
  * (e.g., node, teaser, list, table, etc.)
  * (Requires views-view.tpl.php file in theme directory)
  */
-function tnt_allgearedup_6_preprocess_views_view(&$vars) {
+function davisonsoftware_preprocess_views_view(&$vars) {
   $vars['css_name'] = $vars['css_name'] .' view-style-'. views_css_safe(strtolower($vars['view']->type));
 }
 
@@ -415,7 +415,7 @@ function tnt_allgearedup_6_preprocess_views_view(&$vars) {
 /**
  * Modify search results based on theme settings
  */
-function tnt_allgearedup_6_preprocess_search_result(&$variables) {
+function davisonsoftware_preprocess_search_result(&$variables) {
   static $search_zebra = 'even';
   $search_zebra = ($search_zebra == 'even') ? 'odd' : 'even';
   $variables['search_zebra'] = $search_zebra;
@@ -462,7 +462,7 @@ function tnt_allgearedup_6_preprocess_search_result(&$variables) {
 /**
  * Hide or show username '(not verified)' text
  */
-function tnt_allgearedup_6_username($object) {
+function davisonsoftware_username($object) {
   if ((!$object->uid) && $object->name) {
     $output = (!empty($object->homepage)) ? l($object->name, $object->homepage, array('attributes' => array('rel' => 'nofollow'))) : check_plain($object->name);
     $output .= (theme_get_setting('user_notverified_display') == 1) ? ' ('. t('not verified') .')' : '';
@@ -477,7 +477,7 @@ function tnt_allgearedup_6_username($object) {
 /**
  * Set form file input max char size 
  */
-function tnt_allgearedup_6_file($element) {
+function davisonsoftware_file($element) {
   $element['#size'] = ($element['#size'] > 40) ? 40 : $element['#size'];
   return theme_file($element);
 }
@@ -486,7 +486,7 @@ function tnt_allgearedup_6_file($element) {
 /**
  * Limit string length in word increments, add ellipsis
  */
-function tnt_allgearedup_6_wordlimit($string, $length = 50, $ellipsis = "...") {
+function davisonsoftware_wordlimit($string, $length = 50, $ellipsis = "...") {
   $words = explode(' ', strip_tags($string));
   if (count($words) > $length)
     return implode(' ', array_slice($words, 0, $length)) . $ellipsis;
@@ -498,10 +498,10 @@ function tnt_allgearedup_6_wordlimit($string, $length = 50, $ellipsis = "...") {
 /**
  * Count the total number of CSS files in $vars['css']
  */
-function tnt_allgearedup_6_css_count($array) {
+function davisonsoftware_css_count($array) {
   $count = 0;
   foreach ($array as $item) {
-    $count = (is_array($item)) ? $count + tnt_allgearedup_6_css_count($item) : $count + 1;
+    $count = (is_array($item)) ? $count + davisonsoftware_css_count($item) : $count + 1;
   }
   return $count;
 }
@@ -541,6 +541,6 @@ function tnt_allgearedup_6_css_count($array) {
  * @return
  *   an HTML string containing a link to the given path.
  */
-function tnt_allgearedup_6_themesettings_link($prefix, $suffix, $text, $path, $options) {
+function davisonsoftware_themesettings_link($prefix, $suffix, $text, $path, $options) {
   return $prefix . (($text) ? l($text, $path, $options) : '') . $suffix;
 }

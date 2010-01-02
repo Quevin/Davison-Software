@@ -1,3 +1,5 @@
+/* @override http://ds:8888/sites/all/themes/davisonsoftware/style.css?j */
+
 /* All Geared Up 6 - topnotchthemes_1021 v1.2 06122009 */
 
 /***************************************/
@@ -117,7 +119,7 @@ ul,
 ul.menu {
   list-style-position: inside;
   list-style-type: disc;
-  margin: 0 0 0 1.40em;
+  margin: 0 0 15px 1.40em;
 }
 
 ol {
@@ -133,6 +135,10 @@ ol {
 ul.links li {
   background: none;
   padding: 0 10px 0 0;
+}
+
+body.front ul.links{
+	display: none;
 }
 
 li.leaf {
@@ -250,11 +256,13 @@ hr {
 }
 
 #header-bottom h1 {                          /* site name */
+  float:left;
+  width: 180px;
   font-size: 2.16em;
   font-weight: normal;
   line-height: 1em;
-  margin: 0;
-  padding: 10px 0 0;
+  margin: 0 0 0 -10px;
+  padding: 18px 0 0;
   text-transform: uppercase;
 }
 
@@ -268,6 +276,7 @@ hr {
   font-size: 1.25em;
   font-weight: bold;
   list-style-type: none;
+  margin-bottom: 5px;
   padding: 0 0 0 32px;
   text-transform: uppercase;
 }
@@ -312,15 +321,22 @@ hr {
 .not-front #logo {
   float: left;
   margin: 0 0 0 -18px;
-  padding: 0 10px 0 0;
+  padding: 0;
 }
 
 #slogan {                          /* site slogan */
+display:block;
+float: left;
   color: #003955;
   font-size: 1.333em;
   font-weight: bold;
   display: block;
-  margin: 0;
+  margin: 0 10px 0 17px;
+  padding: 0;
+}
+
+body.not-front #slogan{
+	display: none;
 }
 
 /*----- header-first -----*/
@@ -331,7 +347,7 @@ hr {
 }
 
 .front #header-first {
-  width: 330px;
+  width: 315px;
 }
 
 .not-front #header-first {
@@ -345,12 +361,12 @@ hr {
 }
 
 .front #header-middle {
-  padding: 24px 10px 0 0;
-  width: 250px;
+  padding: 10px 10px 0 0;
+  width: 215px;
 }
 
 .not-front #header-middle {
-  padding: 24px 0 0 8px;
+  padding: 10px 0 0 8px;
   width: 200px;
 }
 
@@ -363,9 +379,9 @@ hr {
 }
 
 .front #header-last {
-  width: 230px;
+  width: 300px;
   overflow: hidden;
-  padding: 24px 0 0;
+  padding: 10px 0 0;
 }
 
 .not-front #header-last {
@@ -389,6 +405,7 @@ hr {
 }  
 
 .not-front #header-last h2.block-title {
+	padding-top: 5px;
   color: #99FF00;
 }
 
@@ -1285,7 +1302,7 @@ div.block-region {          /* highlighted display of regions on block admin pag
   overflow: hidden;
   padding: 2px;
   position: absolute;
-  width: 175px;
+  width: 145px;
   z-index: 2;
 }
   
@@ -1301,7 +1318,7 @@ div.block-region {          /* highlighted display of regions on block admin pag
   height: auto;
   margin: 0;
   padding: 0;
-  width: 175px;
+  width: 145px;
 }
 
 #primary-menu ul.menu li ul.menu li.first {
@@ -1324,8 +1341,8 @@ div.block-region {          /* highlighted display of regions on block admin pag
   color: #5E5E5E;
   display: block;
   margin: 0;
-  padding: 10px 0 10px 20px;
-  width: 155px;
+  padding: 4px 0 3px 5px;
+  width: 140px;
 }
 
 #primary-menu ul.menu li ul li a:hover,
@@ -1820,7 +1837,7 @@ div.view div.views-admin-links {
 
 table {
   border-collapse: collapse;
-  width: 100%;
+  /*width: 100%;*/
 }
 
 th {
