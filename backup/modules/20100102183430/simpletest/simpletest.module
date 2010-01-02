@@ -1,5 +1,5 @@
 <?php
-// $Id: simpletest.module,v 1.33.2.4.2.21 2009/12/14 23:27:11 boombatower Exp $
+// $Id: simpletest.module,v 1.33.2.4.2.20 2009/09/14 20:34:30 boombatower Exp $
 // Core: Id: simpletest.module,v 1.71 2009/08/24 00:14:21 webchick Exp
 
 /**
@@ -519,7 +519,7 @@ function simpletest_clean_temporary_directories() {
   $count = 0;
   foreach ($files as $file) {
 //    $path = 'public://' . $file;
-    $path = file_directory_path() . '/' . $file;
+    $path = file_directory_path() . $file;
     if (is_dir($path) && preg_match('/^simpletest\d+/', $file)) {
 //      file_unmanaged_delete_recursive($path);
       simpletest_clean_temporary_directory($path);

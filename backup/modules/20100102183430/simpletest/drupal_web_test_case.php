@@ -1,5 +1,5 @@
 <?php
-// $Id: drupal_web_test_case.php,v 1.2.2.3.2.46 2009/11/06 21:23:32 boombatower Exp $
+// $Id: drupal_web_test_case.php,v 1.2.2.3.2.43 2009/09/14 23:22:56 boombatower Exp $
 // Core: Id: drupal_web_test_case.php,v 1.146 2009/08/31 18:30:26 webchick Exp $
 
 /**
@@ -557,10 +557,8 @@ class DrupalUnitTestCase extends DrupalTestCase {
     $this->originalFileDirectory = file_directory_path();
 
     // Generate temporary prefixed database to ensure that tests have a clean starting point.
-//    $db_prefix = Database::getConnection()->prefixTables('{simpletest' . mt_rand(1000, 1000000) . '}');
-    $db_prefix = $db_prefix . 'simpletest' . mt_rand(1000, 1000000);
-//    $conf['file_public_path'] = $this->originalFileDirectory . '/' . $db_prefix;
-    $conf['file_directory_path'] = $this->originalFileDirectory . '/simpletest/' . substr($db_prefix, 10);
+    $db_prefix = Database::getConnection()->prefixTables('{simpletest' . mt_rand(1000, 1000000) . '}');
+    $conf['file_public_path'] = $this->originalFileDirectory . '/' . $db_prefix;
 
     // If locale is enabled then t() will try to access the database and
     // subsequently will fail as the database is not accessible.
@@ -575,8 +573,7 @@ class DrupalUnitTestCase extends DrupalTestCase {
   function tearDown() {
     global $db_prefix, $conf;
     if (preg_match('/simpletest\d+/', $db_prefix)) {
-//      $conf['file_public_path'] = $this->originalFileDirectory;
-      $conf['file_directory_path'] = $this->originalFileDirectory;
+      $conf['file_public_path'] = $this->originalFileDirectory;
       // Return the database prefix to the original.
       $db_prefix = $this->originalPrefix;
       // Restore modules if necessary.
@@ -1173,7 +1170,7 @@ class DrupalWebTestCase extends DrupalTestCase {
 
     // Use the test mail class instead of the default mail handler class.
 //    variable_set('mail_sending_system', array('default-system' => 'TestingMailSystem'));
-    variable_set('smtp_library', drupal_get_path('module', 'simpletest') . '/simpletest.mail.inc');
+    variable_set('smtp_library', drupal_get_path('module', 'simpletest') . '/simpletest.test');
 
     // Use temporary files directory with the same prefix as the database.
 //    $public_files_directory  = $this->originalFileDirectory . '/' . $db_prefix;
@@ -1535,8 +1532,7 @@ class DrupalWebTestCase extends DrupalTestCase {
             // is broken. This is a less than elegant workaround. Alternatives
             // are being explored at #253506.
             foreach ($upload as $key => $file) {
-//              $file = drupal_realpath($file);
-              $file = realpath($file);
+              $file = drupal_realpath($file);
               if ($file && is_file($file)) {
                 $post[$key] = '@' . $file;
               }
@@ -2562,11 +2558,7 @@ class DrupalWebTestCase extends DrupalTestCase {
     $captured_emails = variable_get('drupal_test_email_collector', array());
     $email = end($captured_emails);
 //    return $this->assertTrue($email && isset($email[$name]) && $email[$name] == $value, $message, t('E-mail'));
-    return $this->assertTrue(
-      ($email && isset($email[$name]) && $email[$name] == $value) ||
-      ($email && isset($email['params'][$name]) && $email['params'][$name] == $value),
-      $message,
-      t('E-mail'));
+    return $this->assertTrue($email && isset($email['params'][$name]) && $email['params'][$name] == $value, $message, t('E-mail'));
   }
 
   /**
