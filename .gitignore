@@ -1,6 +1,5 @@
 files/
 settings.php
 _notes/
-.htaccess
 .DS_Store
-robots.txt
+cache/
