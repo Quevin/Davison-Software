@@ -1,0 +1,209 @@
+/* All Geared Up 6 - topnotchthemes_1021 v1.2 06122009 */
+
+/*************/
+/* IE7 FIXES */
+/*************/
+
+/* limit legend width to text length */
+form fieldset legend {
+  display: inline-block !important;
+}
+
+body {
+  background: #999999 url('images/body-bg.jpg') repeat-x top;
+  color: #5A5A5A;
+  font-family: Lucida Grande, Lucida Sans Unicode, Verdana, Helvetica, Arial, sans-serif;     /* web safe fonts */
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 16px;
+}
+
+#primary-menu {
+  margin-bottom: -5px;
+}
+
+#primary-menu ul.menu li.leaf.first {
+  background: transparent url('images/primary-menu-rounded-left.png') no-repeat 0 0;
+  margin: 0;
+  padding: 0 0 0 8px;
+}
+
+#primary-menu ul.menu li.expanded.first {
+  background: transparent url('images/primary-menu-rounded-left.png') no-repeat 0 0;
+  margin: 0;
+  padding: 0 0 0 8px;
+}
+
+#header-top #search-box {
+  margin-top: 0;
+}
+
+#header-top .form-submit {
+  height: 1%;
+  position: relative;
+  top: 2px;
+}
+
+#header-top #edit-search-theme-form-keys.form-text {
+  padding-top: 0;
+  margin-bottom: 4px;
+}
+
+#header-bottom ul li {
+  background: transparent url('images/green-check.png') no-repeat 10px 0;
+  padding: 0 0 0 18px;
+}
+
+.front #logo {
+  float: left;
+  margin: 0;
+  padding: 0 100px 0 30px;
+}
+
+.not-front #logo {
+  padding-left: 0;
+}
+
+.front #header-first {
+  width: 300px;
+}
+
+.front #header-last {
+  height: 228px;
+  padding: 0 20px 0 0;
+  width: 230px;
+}
+
+.not-front #header-wrapper {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.not-front #header-last {
+  right: -8px;
+  top: 9px;
+}
+
+#preface-wrapper {
+  margin-top: 0;
+}
+
+#preface-first,
+#preface-last {
+  margin-top: -14px;
+}
+
+#main-wrapper {
+  background: #fff;
+  height: 1%;
+  margin: 0;
+  padding: 20px;
+  padding-right: 14px;
+}
+
+#sidebar-last .block-wrapper.odd {
+  padding-top: 2px;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-block.rounded-block-top {
+  padding: 2px 0 0;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-block-bottom {
+  background: transparent url('images/odd-block-bottom.png') no-repeat center;
+  height: 1px;
+  margin: -14px 0 0;
+  padding: 10px 0 0;
+}
+
+#sidebar-last .block-wrapper.odd .rounded-inside {
+  background: transparent url('images/odd-block-bg.png') repeat-y center;
+  border-left: 0;                                 /* left inside border color & width */
+  border-right: 0;                                /* right inside border color & width */
+  margin: -3px 0 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+}
+
+#sidebar-last .block-wrapper.odd .item-list {
+  background: inherit;
+  position: relative;
+}
+
+#postscript-first .rounded-block-bottom {
+  background: transparent url('images/postscript-first-bottom.png') no-repeat center bottom;
+  padding: 16px 0 0;
+}
+
+#postscript-middle .rounded-block-bottom {
+  background: transparent url('images/postscript-mid-bottom.png') no-repeat center bottom;
+  padding: 8px 0 0;
+}
+
+#footer-top {
+  background: transparent url('images/rounded-bottom.jpg') no-repeat 0 0;
+  height:10px;
+  margin:0;
+  padding:0;
+}
+
+#footer {
+  padding: 0 0 20px;
+}
+
+li.leaf {
+  background: transparent url('images/red-bullet.png') no-repeat 2px 0.75em;
+  list-style-image: none;
+  list-style-type: none;
+  margin: 0.15em 0 0.15em .5em
+}
+
+#content ul li,
+.item-list ul li {
+  padding: 0.2em 0.5em 0 0;
+}
+
+.postscript-first #postscript-first .rounded-block-bottom,
+.postscript-first-middle #postscript-first .rounded-block-bottom ,
+.postscript-first-middle-last #postscript-first .rounded-block-bottom,
+.postscript-first-last #postscript-first .rounded-block-bottom  {
+  padding: 16px 0 0;
+}
+
+.postscript-first #postscript-middle .rounded-block-bottom,
+.postscript-first-middle #postscript-middle .rounded-block-bottom ,
+.postscript-first-middle-last #postscript-middle .rounded-block-bottom,
+.postscript-middle #postscript-middle .rounded-block-bottom,
+.postscript-middle-last #postscript-middle .rounded-block-bottom   {
+  padding: 8px 0 0;
+}
+
+
+/******************/
+/* HELPER CLASSES */
+/******************/
+.clearfix {                                       /* add .clearfix class to clear floats after an element */
+  display: block;
+  height: 1%;
+}
+
+div#content-tabs,                                 /* fix tab layout */
+div#content-tabs ul.primary,
+div#content-tabs ul.secondary {
+  display: block;
+  float: none;
+  height: 1%;
+}
+
+
+/*******************/
+/* USER LOGIN BLOCK */
+/*******************/
+#header-top #block-user-0 .item-list  {
+  position: relative;
+}
+
+#header-top #block-user-0 .item-list li {
+  padding: 0 0 0 10px;
+}
