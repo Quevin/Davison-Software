@@ -1492,11 +1492,12 @@ function user_edit_form(&$form_state, $uid, $edit, $register = FALSE) {
   }
 
 // added by Quevin for file upload field:  
+
 if (!$register){
 $form['#attributes']['enctype'] = 'multipart/form-data';
 $form['document_upload'] = array(
 	'#type' => 'file',
-	'#title' => t('File'),
+	'#title' => t('Data File Upload'),
 	'#required' => FALSE,
 	'#description' => t('Click "Browse" to select a file to upload. The maximum file size per upload is %size MB.', array('%size' => round(file_upload_max_size()/(100000*100000), 0))),
 	'#weight' => -5,
