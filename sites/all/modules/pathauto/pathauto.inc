@@ -1,5 +1,5 @@
 <?php
-// $Id: pathauto.inc,v 1.45.2.3 2009/10/20 17:52:12 greggles Exp $
+// $Id: pathauto.inc,v 1.45.2.6 2009/12/03 16:13:01 greggles Exp $
 
 /**
  * @file
@@ -66,14 +66,14 @@ define('PREG_CLASS_ALNUM',
  */
 function _pathauto_alias_exists($alias, $src, $language = '') {
   $alias_pid = db_result(db_query_range("SELECT pid FROM {url_alias} WHERE dst = '%s' AND src <> '%s' AND language = '%s'", array($alias, $src, $language), 0, 1));
-  if (function_exists('path_redirect_delete')) {
+  if (function_exists('path_redirect_delete_multiple')) {
     // Delete from path_redirect the exact same alias to the same node.
-    path_redirect_delete(array('path' => $alias, 'redirect' => $src));
+    path_redirect_delete_multiple(NULL, array('source' => $alias, 'redirect' => $src));
 
     // If there still is this alias used in path_redirect, then create a different alias
-    $redirect_rid = db_result(db_query_range("SELECT rid FROM {path_redirect} WHERE path = '%s'", $alias, 0, 1));
+    $redirects = path_redirect_load_multiple(NULL, array('source' => $alias));
   }
-  if ($alias_pid || !empty($redirect_rid)) {
+  if ($alias_pid || !empty($redirects)) {
     return TRUE;
   }
   else {
@@ -199,14 +199,19 @@ function pathauto_cleanstring($string, $clean_slash = TRUE) {
     else {
       $seppattern = '\\'. $separator;
     }
-    // Trim any leading or trailing separators (note the need to
+    // Trim any leading or trailing separators.
     $output = preg_replace("/^$seppattern+|$seppattern+$/", '', $output);
 
     // Replace trailing separators around slashes.
     $output = preg_replace("/$seppattern\/|\/$seppattern/", "/", $output);
 
-    // Replace multiple separators with a single one
+    // Replace multiple separators with a single one.
     $output = preg_replace("/$seppattern+/", "$separator", $output);
+
+    // Optionally convert to lower case.
+    if (variable_get('pathauto_case', PATHAUTO_CASE_LOWER)) {
+      $output = drupal_strtolower($output);
+    }
   }
 
   // Enforce the maximum component length
@@ -287,13 +292,8 @@ function pathauto_create_alias($module, $op, $placeholders, $src, $entity_id, $t
     $old_alias = $update_data['old_alias'];
   }
 
-  // Replace the placeholders with the values provided by the module,
-  // and optionally lower-case the result
+  // Replace the placeholders with the values provided by the module.
   $alias = str_replace($placeholders['tokens'], $placeholders['values'], $pattern);
-
-  if (variable_get('pathauto_case', 1)) {
-    $alias = drupal_strtolower($alias);
-  }
 
   // Two or more slashes should be collapsed into one
   $alias = preg_replace('/\/+/', '/', $alias);
@@ -405,7 +405,7 @@ function _pathauto_set_alias($src, $dst, $entity_type, $entity_id, $pid = NULL, 
     if (variable_get('pathauto_update_action', 2) == 3 && function_exists('path_redirect_save')) {
       if (!empty($old_alias)) {
         $redirect = array(
-          'path' => $old_alias,
+          'source' => $old_alias,
           'redirect' => $src,
         );
         path_redirect_save($redirect);
