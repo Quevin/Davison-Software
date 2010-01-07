@@ -2,3 +2,4 @@ files/
 settings.php
 _notes/
 .DS_Store
+cache/
