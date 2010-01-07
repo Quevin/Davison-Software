@@ -27,11 +27,7 @@ DirectoryIndex index.php
 
 # Increase PHP Memory Limit
 
-<<<<<<< HEAD:.htaccess
 php_value memory_limit 150M
-=======
-php_value memory_limit 128M
->>>>>>> 4d2223f9ff80272ccc32a936f457c43046a0c4f0:.htaccess
 
 # Override PHP settings. More in sites/default/settings.php
 # but the following cannot be changed at runtime.
