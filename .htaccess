@@ -29,6 +29,12 @@ DirectoryIndex index.php
 
 php_value memory_limit 150M
 
+# http://drupal.org/node/97193
+
+php_value upload_max_filesize 10M
+
+php_value post_max_size 20M
+
 # Override PHP settings. More in sites/default/settings.php
 # but the following cannot be changed at runtime.
 
