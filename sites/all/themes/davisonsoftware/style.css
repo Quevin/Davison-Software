@@ -1,5 +1,3 @@
-/* @override http://ds:8888/sites/all/themes/davisonsoftware/style.css?j */
-
 /* All Geared Up 6 - topnotchthemes_1021 v1.2 06122009 */
 
 /***************************************/
@@ -1312,7 +1310,7 @@ div.block-region {          /* highlighted display of regions on block admin pag
   overflow: hidden;
   padding: 2px;
   position: absolute;
-  width: 145px;
+  width: 175px;
   z-index: 2;
 }
   
@@ -1351,8 +1349,8 @@ div.block-region {          /* highlighted display of regions on block admin pag
   color: #5E5E5E;
   display: block;
   margin: 0;
-  padding: 4px 0 3px 5px;
-  width: 140px;
+  padding: 10px 0 10px 20px;
+  width: 155px;
 }
 
 #primary-menu ul.menu li ul li a:hover,
