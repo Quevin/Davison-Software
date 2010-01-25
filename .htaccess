@@ -27,7 +27,7 @@ DirectoryIndex index.php
 
 # Increase PHP Memory Limit
 
-php_value memory_limit 150M
+php_value memory_limit 128M
 
 # http://drupal.org/node/97193
 
