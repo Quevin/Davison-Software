@@ -19,7 +19,7 @@ body {
 }
 
 #primary-menu {
-  margin-bottom: -5px;
+  /* margin-bottom: -5px; */
 }
 
 #primary-menu ul.menu li.leaf.first {
@@ -57,21 +57,26 @@ body {
 .front #logo {
   float: left;
   margin: 0;
-  padding: 0 100px 0 30px;
+  padding: 0;
 }
 
 .not-front #logo {
   padding-left: 0;
+  margin: 0;
 }
 
 .front #header-first {
-  width: 300px;
+  width: 315px;
 }
 
 .front #header-last {
   height: 228px;
-  padding: 0 20px 0 0;
-  width: 230px;
+  padding: 10px 0 0;
+  width: 300px;
+}
+
+span#slogan {
+	width: 300px;
 }
 
 .not-front #header-wrapper {
@@ -156,7 +161,7 @@ li.leaf {
   background: transparent url('images/red-bullet.png') no-repeat 2px 0.75em;
   list-style-image: none;
   list-style-type: none;
-  margin: 0.15em 0 0.15em .5em
+  margin: 0;
 }
 
 #content ul li,
