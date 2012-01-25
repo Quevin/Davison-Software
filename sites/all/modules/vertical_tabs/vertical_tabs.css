@@ -1,4 +1,3 @@
-/* $Id: vertical_tabs.css,v 1.1.2.12 2009/11/28 22:10:17 davereid Exp $*/
 
 div.vertical-tabs {
   margin: 1em 0 1em 15em;
@@ -66,4 +65,10 @@ div.vertical-tabs ul.vertical-tabs-list .summary {
 div.vertical-tabs ul.vertical-tabs ul.vertical-tabs-list .summary {
   line-height: normal;
   margin-bottom: 0;
+}
+
+/* Back-port only additions. */
+div.vertical-tabs ul.vertical-tabs-list li.error {
+  border:1px solid #DD7777 !important;
+  background: #FFCCCC !important;
 }

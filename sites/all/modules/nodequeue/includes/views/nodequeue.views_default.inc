@@ -1,5 +1,4 @@
 <?php
-// $Id: nodequeue.views_default.inc,v 1.2 2008/09/09 22:41:15 ezrag Exp $
 
 /**
  * @file
@@ -9,6 +8,10 @@
  */
 function nodequeue_views_default_views() {
   $views = array();
+   if (variable_get('nodequeue_view_per_queue', 1) != 1) {
+    return $views;
+  }
+
   $queues = nodequeue_load_queues(nodequeue_get_all_qids(NULL));
   foreach ($queues as $queue) {
     $view = new view;
@@ -192,4 +195,3 @@ function nodequeue_views_default_views() {
   }
   return $views;
 }
-

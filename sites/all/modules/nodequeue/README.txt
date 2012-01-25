@@ -1,4 +1,3 @@
-$Id: README.txt,v 1.6 2009/10/26 15:07:49 ezrag Exp $
 The Node Queue module allows an administrator to arbitrarily put nodes in a
 group for some purpose; examples of this might be to highlight one particular
 node, as in a typical news site's Lead Article. Another use might be to create
@@ -20,7 +19,6 @@ When a node is added to the queue, it is added to the back of the queue. If a
 queue is full when a node is added, the front of the queue is removed. 
 
 Nodequeue has support for nodes with i18n Internationalizations.
-You must install the Translation Helpers module from http://drupal.org/project/translation_helpers to use this functionality.
 
 It is highly recommended that you use the Views module to display your queues.
 However, if you choose not to, here is an alternative: Writing a PHP snippet.
@@ -110,7 +108,6 @@ With Nodequeue 6.x-2.x:
 <?php
 $node = nodequeue_load_back($subqueue_id);
 $rendered_node = node_view($node);
- 
 ?>
 
 With Nodequeue 5.x-2.x:

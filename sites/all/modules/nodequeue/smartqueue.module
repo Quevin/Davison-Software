@@ -1,5 +1,4 @@
 <?php
-// $Id: smartqueue.module,v 1.6 2009/06/10 22:19:30 ezrag Exp $
 
 /**
  * Implementation of hook_nodequeue_info()
@@ -21,8 +20,15 @@ function smartqueue_taxonomy_nodequeue_form($queue, &$form) {
   $form['placeholder']['vocabularies'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Vocabularies'),
-    '#description' => t('Select which vocabularies to use; each unique combination of terms from all of these vocabularies will have a subqueue.'),
+    '#description' => t('Select which vocabularies to use; each unique combination of terms from all of these vocabularies will have a subqueue. This selection cannot be changed after the queue is created.'),
     '#options' => $options,
+  );
+
+  $form['placeholder']['use_parents'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Assume parent term for hierarchical vocabs'),
+    '#description' => t("Instead of using the node's terms for nodequeue assignment use the top-most parents of a term. This has no effect if there in non-hierarchical vocabularies."),
+    '#default_value' => isset($queue->use_parents) ? $queue->use_parents : 0,
   );
 
   $form['subqueue_title'] = array(
@@ -34,10 +40,16 @@ function smartqueue_taxonomy_nodequeue_form($queue, &$form) {
     '#description' => t('What to display for the subqueue title; use %subqueue to embed the actual subqueue title. This is used to distinguish multiple nodequeues with subqueues from each other, as internal subqueue title is filled automatically.'),
   );
 
-
-  if ($queue->qid) {
+  if (!empty($queue->qid)) {
+    // Lock the vocabulary selection.
     $form['placeholder']['vocabularies']['#disabled'] = TRUE;
     $form['placeholder']['vocabularies']['#default_value'] = explode('-', $queue->reference);
+
+    // Only show node types that are available for this queue.
+    if (!empty($queue->reference)) {
+      $node_types = _smartqueue_taxonomy_get_node_types($queue);
+      $form['types']['#options'] = $node_types;
+    }
   }
 }
 
@@ -56,6 +68,18 @@ function smartqueue_taxonomy_nodequeue_form_validate($queue, &$form_state, &$for
   }
 }
 
+/**
+ * Implementation of hook_nodequeue_form_submit_finish()
+ */
+function smartqueue_taxonomy_nodequeue_form_submit_finish($queue, $form_state) {
+  $qid = db_result(db_query('SELECT qid FROM {smartqueue} WHERE qid = %d', $queue->qid));
+  if ($qid) {
+    db_query('UPDATE {smartqueue} SET use_parents = %d  WHERE qid = %d', $form_state['values']['use_parents'], $queue->qid);
+  }
+  else {
+    db_query('INSERT INTO {smartqueue} (qid, use_parents) VALUES (%d, %d)', $queue->qid, $form_state['values']['use_parents']);
+  }
+}
 
 /**
  * Implementation of hook_nodequeue_subqueues()
@@ -80,6 +104,13 @@ function smartqueue_taxonomy_nodequeue_subqueues(&$queue, $node) {
       if (isset($vids[$value->vid])) {
         $vids[$value->vid][] = $value->tid;
       }
+    }
+  }
+
+  if ($queue->use_parents) {
+    // Replace taxonomy IDs by their parents'
+    foreach ($vids as $vid => &$tids) {
+      $tids = smartqueue_taxonomy_get_parents($tids);
     }
   }
 
@@ -119,6 +150,22 @@ function smartqueue_taxonomy_nodequeue_subqueues(&$queue, $node) {
     }
   }
   return $references;
+}
+
+/**
+ * Implementation of hook_nodequeue_alter
+ */
+function smartqueue_nodequeue_alter(&$data, $type) {
+  switch ($type) {
+    case 'load_queues':
+      $qids = array_keys($data);
+      $placeholders = db_placeholders($qids);
+      $result = db_query("SELECT qid, use_parents FROM {smartqueue} WHERE qid IN ($placeholders)", $qids);
+      while ($queue = db_fetch_object($result)) {
+        $data[$queue->qid]->use_parents = $queue->use_parents;
+      }
+      break;
+  }
 }
 
 /**
@@ -175,7 +222,6 @@ function smartqueue_taxonomy_get_terms($vid) {
 
 
 // TODO:
-// * Automatically add subqueues when terms are created.
 // * Handle vocabulary changes (maybe?)
 /**
  * Implementation of hook_taxonomy.
@@ -183,7 +229,7 @@ function smartqueue_taxonomy_get_terms($vid) {
 function smartqueue_taxonomy($op, $type, $array = NULL) {
   switch ($type) {
     case 'term':
-      switch ($op){
+      switch ($op) {
         // If a term was updated, we need to update any relevant nodequeue titles.
         case 'update':
           $tid = $array['tid'];
@@ -209,6 +255,10 @@ function smartqueue_taxonomy($op, $type, $array = NULL) {
         // If a term was deleted, we need to delete any subqueues containing it.
         case 'delete':
           $tid = $array['tid'];
+          if (empty($tid)) {
+            // Don't proceed and delete all subqueues.
+            return;
+          }
           // Find subqueues that contain this term.
           $result = db_query(
             "SELECT sq.sqid FROM {nodequeue_subqueue} sq
@@ -228,4 +278,86 @@ function smartqueue_taxonomy($op, $type, $array = NULL) {
     case 'vocabulary':
       break;
   }
+}
+
+/**
+ * Implementation of hook_nodequeue_autocomplete().
+ */
+function smartqueue_taxonomy_nodequeue_autocomplete($queue, $subqueue, $string, $where, $where_args) {
+  $matches = array();
+  $result = taxonomy_select_nodes(array($subqueue->reference), 'or', 'all', TRUE);
+
+  $nids = array();
+  while ($node = db_fetch_object($result)) {
+    $nids[] = $node->nid;
+  }
+
+  if (!empty($nids)) {
+    // Disable language selection temporarily, enable it again later.
+    if (module_exists('i18n')) {
+      i18n_selection_mode('off');
+    }
+
+    $result = db_query_range(db_rewrite_sql("SELECT n.nid, n.title, n.tnid FROM {node} n WHERE n.nid IN (" . implode(',', $nids) . ") AND " . $where), $where_args, 0, variable_get('nodequeue_autocomplete_limit', 10));
+
+    if (module_exists('i18n')) {
+      i18n_selection_mode('reset');
+    }
+
+    while ($node = db_fetch_object($result)) {
+      $id = nodequeue_get_content_id($queue, $node);
+      $matches[$id] = check_plain($node->title) . " [nid: $id]";
+    }
+  }
+
+  return $matches;
+}
+
+/**
+ * Get the top-level parents of the given taxonomy terms.
+ *
+ * @param $tids, an array of taxonomy IDs
+ *
+ * @return an array of taxonomy IDs
+ */
+function smartqueue_taxonomy_get_parents($tids) {
+  if ($tids) {
+    $top_level_tids = array();
+    foreach ($tids as $tid) {
+      $result = db_query(db_rewrite_sql("SELECT t.tid, t.* FROM {term_data} t INNER JOIN {term_hierarchy} h ON h.parent = t.tid WHERE h.tid = %d ORDER BY weight, name", 't', 'tid'), $tid);
+      $parents = array();
+      // This will filter out some duplicates.
+      while ($parent = db_fetch_object($result)) {
+        $parents[$parent->tid] = $parent->tid;
+      }
+      if (count($parents)) {
+        $parent_tid = smartqueue_taxonomy_get_parents($parents);
+        $top_level_tids = array_merge($parent_tid, $top_level_tids);
+      }
+      // When there aren't any matches, hand back the original tids.
+      else {
+        $top_level_tids[] = $tid;
+      }
+    }
+    return array_unique($top_level_tids);
+  }
+  else {
+    return array();
+  }
+}
+
+/**
+ * Returns the available node types for a taxonomy smartqueue.
+ */
+function _smartqueue_taxonomy_get_node_types($queue) {
+  $node_types = array();
+  $vocabularies = explode('-', $queue->reference);
+  $placeholders = db_placeholders($vocabularies);
+  $result = db_query(db_rewrite_sql("SELECT DISTINCT(vnt.type), nt.name FROM {vocabulary_node_types} vnt LEFT JOIN {node_type} nt ON vnt.type = nt.type WHERE vnt.vid IN ($placeholders)"), $vocabularies);
+
+  while ($node_type = db_fetch_object($result)) {
+    $node_types[$node_type->type] = $node_type->name;
+  }
+
+  return $node_types;
 }

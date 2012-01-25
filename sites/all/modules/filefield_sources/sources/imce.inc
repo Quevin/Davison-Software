@@ -1,5 +1,4 @@
 <?php
-// $Id: imce.inc,v 1.2 2009/05/05 18:41:24 quicksketch Exp $
 
 /**
  * @file
@@ -10,13 +9,8 @@
  * same name. Any of these hooks could be broken out into a separate module.
  */
 
-if ($_GET['q'] == 'imce' && isset($_GET['filefield']) && isset($_GET['type']) && content_fields($_GET['filefield'], $_GET['type'])) {
-  $GLOBALS['conf']['imce_custom_scan'] = 'filefield_source_imce_custom_scan';
-  $GLOBALS['conf']['imce_custom_process'] = array('filefield_source_imce_custom_process' => 1);
-}
-
 /**
- * Implementation of hook_filefield_source_info().
+ * Implements hook_filefield_source_info().
  */
 function filefield_source_imce_info() {
   $source = array();
@@ -31,12 +25,29 @@ function filefield_source_imce_info() {
     'description' => t('Select a file to use from a file browser.'),
     'process' => 'filefield_source_imce_process',
     'value' => 'filefield_source_imce_value',
+    'weight' => -1,
   );
   return $source;
 }
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_menu().
+ */
+function filefield_source_imce_menu() {
+  $items = array();
+  $items['filefield/imce/%/%'] = array(
+    'page callback' => 'filefield_source_imce_page',
+    'page arguments' => array(2, 3),
+    'access callback' => 'filefield_edit_access',
+    'access arguments' => array(2, 3),
+    'file' => 'sources/imce.inc',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
  */
 function filefield_source_imce_theme() {
   return array(
@@ -48,7 +59,7 @@ function filefield_source_imce_theme() {
 }
 
 /**
- * Implementation of hook_filefield_source_settings().
+ * Implements hook_filefield_source_settings().
  */
 function filefield_source_imce_settings($op, $field) {
   $return = array();
@@ -66,10 +77,10 @@ function filefield_source_imce_process($element, $edit, &$form_state, $form) {
   $field = content_fields($element['#field_name'], $element['#type_name']);
 
   $element['filefield_imce'] = array(
-    '#weight' => 100.3,
-    '#access' => empty($element['fid']['#value']),
+    '#weight' => 100.5,
     '#theme' => 'filefield_source_imce_element',
-    '#description' => filefield_sources_element_validation_help($element),
+    '#filefield_source' => TRUE, // Required for proper theming.
+    '#description' => filefield_sources_element_validation_help($element['#upload_validators']),
   );
 
   $filepath_id = $element['#id'] . '-imce-path';
@@ -84,24 +95,26 @@ function filefield_source_imce_process($element, $edit, &$form_state, $form) {
     ),
   );
 
-  $imce_function = 'window.open(\''. url('imce', array('query' => 'filefield='. $element['#field_name'] .'&type='. $element['#type_name'] .'&app='. rawurlencode($field['widget']['label']) .'|url@'. $filepath_id)) .'\', \'\', \'width=760,height=560,resizable=1\'); return false;';
+  $imce_function = 'window.open(\'' . url('filefield/imce/' . $element['#type_name'] . '/' . $element['#field_name'], array('query' => 'app=' . rawurlencode($field['widget']['label']) . '|url@' . $filepath_id)) . '\', \'\', \'width=760,height=560,resizable=1\'); return false;';
   $element['filefield_imce']['display_path'] = array(
     '#type' => 'markup',
-    '#value' => '<span id="'. $display_id .'" class="filefield-sources-imce-display">' . t('No file selected') .'</span> (<a class="filefield-sources-imce-browse" href="#" onclick="'. $imce_function .'">' . t('browse') . '</a>)',
+    '#value' => '<span id="' . $display_id . '" class="filefield-sources-imce-display">' . t('No file selected') . '</span> (<a class="filefield-sources-imce-browse" href="#" onclick="' . $imce_function . '">' . t('browse') . '</a>)',
   );
 
   $element['filefield_imce']['select'] = array(
+    '#name' => implode('_', $element['#array_parents']) . '_imce_select',
     '#type' => 'submit',
     '#value' => t('Select'),
+    '#validate' => array(),
     '#submit' => array('node_form_submit_build_node'),
     '#name' => $element['#name'] . '[filefield_imce][button]',
     '#id' => $select_id,
     '#attributes' => array('style' => 'display: none;'),
     '#ahah' => array(
-       'path' => 'filefield/ahah/'. $element['#type_name'] .'/'. $element['#field_name'] .'/'. $element['#delta'],
-       'wrapper' => $element['#id'] .'-ahah-wrapper',
-       'method' => 'replace',
-       'effect' => 'fade',
+      'path' => 'filefield/ahah/' . $element['#type_name'] . '/' . $element['#field_name'] . '/' . $element['#delta'],
+      'wrapper' => $element['#id'] .'-ahah-wrapper',
+      'method' => 'replace',
+      'effect' => 'fade',
     ),
   );
 
@@ -121,7 +134,7 @@ function filefield_source_imce_value($element, &$item) {
     }
 
     // Resolve the file path to an FID.
-    if ($fid = db_result(db_query("SELECT fid FROM {files} WHERE filepath = '%s'", $file_path))) {
+    if ($fid = db_result(db_query("SELECT fid FROM {files} WHERE filepath = '%s'", rawurldecode($file_path)))) {
       $file = field_file_load($fid);
       if (filefield_sources_element_validate($element, (object) $file)) {
         $item = array_merge($item, $file);
@@ -139,9 +152,42 @@ function filefield_source_imce_value($element, &$item) {
  * Theme the output of the autocomplete field.
  */
 function theme_filefield_source_imce_element($element) {
-  drupal_add_js(drupal_get_path('module', 'filefield_sources') .'/sources/imce.js');
   $output = theme('markup', $element['display_path']) . theme('hidden', $element['file_path']) . theme('submit', $element['select']);
   return '<div class="filefield-source filefield-source-imce clear-block">' . theme('form_element', $element, $output) . '</div>';
+}
+
+/**
+ * Outputs the IMCE browser for FileField.
+ */
+function filefield_source_imce_page($content_type, $field_name) {
+  global $conf;
+
+  // Check access.
+  if (!module_exists('imce') || !imce_access() || !content_fields($field_name, $content_type)) {
+    return drupal_access_denied();
+  }
+  // Set custom directory scan.
+  $conf['imce_custom_scan'] = 'filefield_source_imce_custom_scan';
+
+  // Disable absolute URLs.
+  $conf['imce_settings_absurls'] = 0;
+
+  // Set custom post-process to disable undesired features.
+  if (empty($conf['imce_custom_process'])) {
+    $conf['imce_custom_process'] = array();
+  }
+  $conf['imce_custom_process'] += array('filefield_source_imce_custom_process' => 1);
+
+  // IMCE 6.x-2.x.
+  if (module_hook('imce', 'file_references')) {
+    module_load_include('inc', 'imce', 'inc/imce.page');
+    return imce();
+  }
+  // IMCE 6.x-1.x.
+  else {
+    module_load_include('inc', 'imce', 'inc/page');
+    return imce_page();
+  }
 }
 
 /**
@@ -169,11 +215,14 @@ function filefield_source_imce_custom_scan($dirname) {
   return $directory;
 }
 
+/**
+ * Post process IMCE profile.
+ */
 function filefield_source_imce_custom_process(&$imce) {
-  // Disable uploading, thumbnails, delete, and other unnecessary features.
-  $imce['perm']['subnav'] = 0;
-  $imce['perm']['upload'] = 0;
-  $imce['perm']['thumb']  = 0;
-  $imce['perm']['delete'] = 0;
-  $imce['perm']['resize'] = 0;
+  // Disable file operations.
+  foreach ($imce['perm'] as $name => $val) {
+    if ($name != 'browse' && $name != 'subnav') {
+      $imce['perm'][$name] = 0;
+    }
+  }
 }

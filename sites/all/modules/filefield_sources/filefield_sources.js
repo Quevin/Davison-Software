@@ -1,28 +1,36 @@
-/* $Id: filefield_sources.js,v 1.1 2009/04/17 00:20:12 quicksketch Exp $ */
+(function ($) {
 
+/**
+ * Behavior to add source options to configured fields.
+ */
 Drupal.behaviors.fileFieldSources = function(context) {
   $('div.filefield-sources-list a', context).click(function() {
     $fileFieldElement = $(this).parents('div.form-item:first').find('div.filefield-element:first');
 
+    // Remove the active class.
+    $(this).parents('div.filefield-sources-list').find('a.active').removeClass('active');
+
+    // Find the unique FileField Source class name.
+    var fileFieldSourceClass = this.className.match(/filefield-source-[0-9a-z]+/i)[0];
+
     // The default upload element is a special case.
     if ($(this).is('.filefield-source-upload')) {
-      $fileFieldElement.find('div.filefield-upload').parent().show();
-      $fileFieldElement.find('div.filefield-source').hide();
+      $fileFieldElement.find('div.filefield-upload').parent().css('display', '');
+      $fileFieldElement.find('div.filefield-source').css('display', 'none');
     }
     else {
-      $fileFieldElement.find('div.filefield-upload').parent().hide();
-      $fileFieldElement.find('div.filefield-source').not('div.' + this.className.replace(' ', '.')).hide();
-      $fileFieldElement.find('div.' + this.className.replace(' ', '.')).show();
+      $fileFieldElement.find('div.filefield-upload').parent().css('display', 'none');
+      $fileFieldElement.find('div.filefield-source').not('div.' + fileFieldSourceClass).css('display', 'none');
+      $fileFieldElement.find('div.' + fileFieldSourceClass).css('display', '');
     }
 
     // Add the active class.
-    $(this).parents('div.filefield-sources-list').find('a.active').removeClass('active');
     $(this).addClass('active');
     Drupal.fileFieldSources.updateHintText($fileFieldElement.get(0));
   });
 
   // Hide all the other upload mechanisms on page load.
-  $('div.filefield-source', context).hide();
+  $('div.filefield-source', context).css('display', 'none');
   $('div.filefield-sources-list', context).each(function() {
     $(this).find('a:first').addClass('active');
   });
@@ -45,7 +53,7 @@ Drupal.fileFieldSources = {
       var sourceType = matches[1];
       var defaultText = '';
       var textfield = $(this).find('input.form-text:first').get(0);
-      var defaultText = Drupal.settings.fileFieldSources[sourceType] ? Drupal.settings.fileFieldSources[sourceType].hintText : '';
+      var defaultText = (Drupal.settings.fileFieldSources && Drupal.settings.fileFieldSources[sourceType]) ? Drupal.settings.fileFieldSources[sourceType].hintText : '';
 
       // If the field doesn't exist, just return.
       if (!textfield) {
@@ -68,7 +76,7 @@ Drupal.fileFieldSources = {
         $(textfield).addClass('hint');
       }
 
-      $(textfield).click(hideHintText);
+      $(textfield).focus(hideHintText);
       $(textfield).blur(showHintText);
 
       function showHintText() {
@@ -94,3 +102,5 @@ Drupal.fileFieldSources = {
     $('div.filefield-element input.hint').val('').removeClass('hint');
   }
 };
+
+})(jQuery);

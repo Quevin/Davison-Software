@@ -1,14 +1,16 @@
 <?php
-//$Id: nodequeue_handler_relationship_nodequeue.inc,v 1.1 2008/09/06 15:42:05 ezrag Exp $
+
 /**
+ * @file
  * Specialized relationship handler to add nodequeues.
  */
 class nodequeue_handler_relationship_nodequeue extends views_handler_relationship {
-  function options(&$options) {
-    parent::options($options);
+  function option_definition() {
+    $options = parent::option_definition();
 
-    $options['limit'] = FALSE;
-    $options['qids'] = array();
+    $options['limit']['default'] = FALSE;
+    $options['qids']['default'] = array();
+    return $options;
   }
 
   /**
@@ -23,7 +25,7 @@ class nodequeue_handler_relationship_nodequeue extends views_handler_relationshi
     $form['limit'] = array(
       '#type' => 'checkbox',
       '#title' => t('Limit to one or more queues (recommended)'),
-      '#default_value'=> $this->options['limit'],
+      '#default_value' => $this->options['limit'],
     );
 
     $options = array();
@@ -70,9 +72,7 @@ class nodequeue_handler_relationship_nodequeue extends views_handler_relationshi
     }
 
     $join->construct();
-
     $alias = $join->definition['table'] . '_' . $join->definition['left_table'];
-
     $this->alias = $this->query->add_relationship($alias, $join, 'nodequeue_nodes', $this->relationship);
   }
 }
